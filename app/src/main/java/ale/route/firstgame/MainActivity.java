@@ -1,6 +1,7 @@
 package ale.route.firstgame;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -65,36 +66,20 @@ public class MainActivity extends Activity implements View.OnClickListener, Obse
             for (int j = 0; j < 4; j++) {
                 buttons[i][j].setTag(new Integer(i * 4 + j + 1));
 
-                buttons[i][j].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        view.animate().rotation(360);
-                        int tag = Integer.parseInt(view.getTag().toString()) - 1;
-                        x=tag/4;
-                        y=tag%4;
-                        game.makeMove(x, y);
-//                        count++;
-//                        if(!game.isEmpty(x,y) && game.possibleMove(x,y))
-//                            count++;
-                        if(game.isEmpty(x,y)){
-                            Toast.makeText(getBaseContext(), "Empty cell", Toast.LENGTH_SHORT).show();
-                        }
-                        if(!game.possibleMove(x,y)){
-                            Toast.makeText(getBaseContext(), "Move not possible", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
+                buttons[i][j].setOnClickListener(this);
             }
         }
         gameChanged();
 
     }
 
-
-
-
-
+    public void play(View view){
+        Intent i = new Intent(this, MainActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        finish();
+        startActivity(i);
+    }
 
     public void gameChanged()
     {
@@ -109,20 +94,21 @@ public class MainActivity extends Activity implements View.OnClickListener, Obse
                 }
     }
 
-
     @Override
     public void onClick(View view) {
-        int x = Integer.parseInt(view.getTag().toString());
-        int size = game.size();
-
-        game.makeMove(x / 4, x % 4);
-
-        if (game.isFinished()) {
-            Toast.makeText(getBaseContext(), "YOU WON THE GAME !!!", Toast.LENGTH_LONG).show();
-
+        //view.animate().rotation(360);
+        int tag = Integer.parseInt(view.getTag().toString()) - 1;
+        x=tag/4;
+        y=tag%4;
+        if(game.isEmpty(x,y)){
+            Toast.makeText(getBaseContext(), "Empty cell", Toast.LENGTH_SHORT).show();
         }
-
-
+        if(!game.possibleMove(x,y)){
+            Toast.makeText(getBaseContext(), "Move not possible", Toast.LENGTH_SHORT).show();
+        }
+        if(!game.isEmpty(x,y) && game.possibleMove(x,y))
+            count++;
+        game.makeMove(x, y);
 
     }
 
@@ -131,8 +117,6 @@ public class MainActivity extends Activity implements View.OnClickListener, Obse
         if (game.isFinished()) {
             Toast.makeText(getBaseContext(), "YOU WON THE GAME !!!", Toast.LENGTH_SHORT).show();
         }
-
-
 
         gameChanged();
         TextView tw = (TextView) findViewById(R.id.textView);

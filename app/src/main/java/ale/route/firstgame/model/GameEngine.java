@@ -38,7 +38,7 @@ public class GameEngine extends Observable implements Game
 			int x=(int)(Math.random()*size-1);
 			int y=(int)(Math.random()*size-1);
 			if(checkCoord(x,y))
-				if(isEmpty(x, y) && possibleMove(x, y))
+				if(!isEmpty(x, y) && possibleMove(x, y))
 					makeMove(x, y);
 			nrMoves--;
 		}
@@ -68,7 +68,7 @@ public class GameEngine extends Observable implements Game
 		checkCoordinates(x, y);
 		
 		if(isEmpty(x, y))
-		Log.d("","Cell is already empty");
+			Log.d("","Cell is already empty");
 			//System.out.println("Cell is already empty");
 			//throw new RuntimeException("Cell is already empty");
 		
